@@ -1,0 +1,19 @@
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Gradio
+.gradio/
+flagged/
+
+# ⚠️ ไม่ ignore *.joblib — model.joblib ต้องอยู่ใน repo (เช็กขนาด < 100 MB ก่อน commit)
