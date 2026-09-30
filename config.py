@@ -18,8 +18,8 @@ BIKE_UCI_ID = 560
 BIKE_TEST_FRAC = 0.2           # ⚠️ ต้องเท่ากับ seoul-bike-demand/config.py
 BIKE_DATE_COL = "Date"
 BIKE_TARGET_COL = "Rented Bike Count"
-BIKE_RAW_ENCODING = None       # TODO: ใส่ encoding ที่ตรวจแล้ว (ไฟล์ต้นฉบับไม่ใช่ UTF-8)
-BIKE_DATE_FORMAT = None        # TODO: ใส่รูปแบบวันที่ที่ตรวจแล้ว
+BIKE_RAW_ENCODING = "cp1252"   # ตรวจแล้วใน notebook 3.1: ° = byte 0xB0 → utf-8 อ่านไม่ได้, cp1252 อ่านได้
+BIKE_DATE_FORMAT = "%d/%m/%Y"  # ตรวจแล้วใน notebook 3.1: ส่วนแรกมีค่าถึง 31 → เป็นวัน/เดือน/ปี
 BIKE_MODEL = BIKE_DIR / "app" / "model.joblib"
 
 # ---- trash-classification ----
