@@ -1,6 +1,0 @@
-# สำหรับ Hugging Face Space — ต้องตรงกับเวอร์ชันที่ใช้ train (โดยเฉพาะ scikit-learn)
-numpy==2.5.3
-scikit-learn==1.9.1
-joblib==1.6.0
-pillow==12.3.0
-gradio==6.28.0

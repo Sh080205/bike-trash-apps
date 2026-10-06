@@ -21,15 +21,3 @@ BIKE_TARGET_COL = "Rented Bike Count"
 BIKE_RAW_ENCODING = None       # TODO: ใส่ encoding ที่ตรวจแล้ว (ไฟล์ต้นฉบับไม่ใช่ UTF-8)
 BIKE_DATE_FORMAT = None        # TODO: ใส่รูปแบบวันที่ที่ตรวจแล้ว
 BIKE_MODEL = BIKE_DIR / "app" / "model.joblib"
-
-# ---- trash-classification ----
-TRASH_DIR = ROOT / "trash-classification"
-TRASH_HF_ID = "garythung/trashnet"
-TRASH_IMAGES_DIR = TRASH_DIR / "data" / "images"
-TRASH_LABELS_CSV = TRASH_DIR / "data" / "labels.csv"
-TRASH_EXAMPLES_DIR = TRASH_DIR / "app" / "examples"
-TRASH_TEST_FRAC = 0.2
-TRASH_MAX_SIDE = 256           # resize ด้านยาว (px)
-TRASH_JPEG_QUALITY = 85
-TRASH_MAX_TOTAL_MB = 200       # เกินนี้ให้หยุดแล้วถามก่อน
-TRASH_MODEL = TRASH_DIR / "app" / "model.joblib"
