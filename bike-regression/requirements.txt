@@ -1,0 +1,14 @@
+# Python 3.13 (Windows: py -3.13 -m venv .venv)
+# pin ตามเวอร์ชันที่ติดตั้งได้จริงบนเครื่อง (2026-09-24)
+# ⚠️ pandas 3.0.x ถูก Windows Smart App Control บล็อก DLL (pandas/_libs/interval) บนเครื่องนี้ → ใช้ 2.3.3
+numpy==2.5.3
+pandas==2.3.3
+scipy==1.18.1
+scikit-learn==1.9.1
+matplotlib==3.11.2
+seaborn==0.13.2
+joblib==1.6.0
+ucimlrepo==0.0.7
+notebook==7.6.3
+ipykernel==7.3.0
+nbclient==0.11.0
