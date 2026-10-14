@@ -75,6 +75,7 @@ python app/app.py                    # เปิดแอปที่ http://127
 ## 6. URL แอป
 
 - **bike-regression:** https://sh080205--seoul-bike-demand.us-east.modal.run
+- **image-classification (Pet Breed Classifier):** https://franknakub--pet-breed-classifier-ui.us-east.modal.run ([repository](https://github.com/fxanlx/pet-breed-classifier))
 
 deploy บน [Modal](https://modal.com) ด้วย `bike-regression/app/modal_app.py` · ถ้าไม่มีคนใช้ 20 นาที แอปจะพักเครื่อง การเปิดครั้งแรกหลังจากนั้นใช้เวลาเริ่มประมาณ 5–10 วินาที · deploy ซ้ำ: `pip install modal` → `modal token new` → `modal deploy bike-regression/app/modal_app.py` (รายละเอียดใน `bike-regression/app/README.md`)
 
