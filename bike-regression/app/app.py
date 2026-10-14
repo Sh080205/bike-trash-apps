@@ -133,7 +133,22 @@ html, body, gradio-app, .gradio-container { width: 100% !important; max-width: 1
 .bike-chips { display: flex; flex-wrap: wrap; gap: 9px; margin-bottom: 8px; }
 .bike-chip { display: inline-flex; gap: 7px; align-items: baseline; border: 1px solid rgba(255,255,255,.4); border-radius: 999px; color: #fff !important; background: rgba(8,57,70,.23); padding: 8px 13px; font-size: .84rem; font-weight: 700; }
 .bike-chip strong { color: #fff !important; font-size: 1rem; font-weight: 900; }
-.bike-skyline { display: block; width: 100%; max-height: 125px; margin-top: 12px; }
+.bike-skyline { display: block; width: 100%; height: clamp(96px, 13vw, 150px); margin-top: 12px; overflow: hidden; }
+.bike-rider { animation: bike-ride 22s linear infinite; }
+.bike-bob { animation: bike-bob .45s ease-in-out infinite alternate; }
+.bike-wheel { transform-box: fill-box; transform-origin: center; animation: bike-spin .8s linear infinite; }
+.bike-wave { animation: bike-wave 7s ease-in-out infinite alternate; }
+.bike-wave.slow { animation-duration: 11s; animation-direction: alternate-reverse; }
+.bike-tower-light { animation: bike-blink 2.6s ease-in-out infinite; }
+@keyframes bike-ride { from { transform: translateX(-90px); } to { transform: translateX(1160px); } }
+@keyframes bike-bob { to { transform: translateY(-1.5px); } }
+@keyframes bike-spin { to { transform: rotate(360deg); } }
+@keyframes bike-wave { to { transform: translateX(-40px); } }
+@keyframes bike-blink { 50% { opacity: .25; } }
+@media (prefers-reduced-motion: reduce) {
+  .bike-rider { animation: none; transform: translateX(330px); }
+  .bike-bob, .bike-wheel, .bike-wave, .bike-tower-light { animation: none; }
+}
 .bike-heading { margin: 29px 0 14px; color: var(--bike-ink) !important; font-size: 1.35rem; font-weight: 900; }
 .bike-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
 .bike-step, .bike-panel, .bike-result {
@@ -191,7 +206,6 @@ html, body, gradio-app, .gradio-container { width: 100% !important; max-width: 1
   .gradio-container { padding: 10px !important; }
   .bike-hero { border-radius: 20px; padding: 24px 20px 0; }
   .bike-hero p { font-size: .96rem; }
-  .bike-skyline { max-height: 85px; }
   .bike-steps { grid-template-columns: 1fr; }
   .main-grid { flex-direction: column !important; }
   .bike-panel { padding: 15px !important; }
@@ -379,6 +393,35 @@ EXAMPLE_LABELS = [
 ]
 
 
+# Inline Seoul scene (no external images): skyline, N Seoul Tower on Namsan, the Han River
+# with a bridge, and a Ttareungyi bike riding along the riverside path.
+_WAVES = "M-80 128 q20 -5 40 0" + " t40 0" * 32
+_ARCHES = "M610 121" + " q30 -14 60 0" * 8
+_WHEEL = ('<g class="bike-wheel"><circle cx="{x}" cy="100" r="11"/>'
+          '<path d="M{x} 89 V111 M{l} 100 H{r}" stroke-width="1.6"/></g>')
+SEOUL_SVG = f"""
+      <svg class="bike-skyline" viewBox="0 0 1100 150" preserveAspectRatio="xMidYMax slice" role="img" aria-label="Seoul skyline with N Seoul Tower, the Han River and a bike on the riverside path" xmlns="http://www.w3.org/2000/svg">
+        <path d="M560 112 Q630 60 700 62 Q780 64 860 112 Z" fill="#e8fff7" opacity=".2"/>
+        <g fill="#f4fffb" opacity=".88">
+          <rect x="697" y="30" width="6" height="34" rx="2"/>
+          <rect x="684" y="22" width="32" height="11" rx="5.5"/>
+          <rect x="689" y="14" width="22" height="8" rx="4"/>
+          <rect x="698.5" y="3" width="3" height="12" rx="1.5"/>
+        </g>
+        <circle class="bike-tower-light" cx="700" cy="3" r="2.6" fill="#ff8a7a"/>
+        <path d="M0 112 V86 H40 V64 H78 V112 H96 V72 H130 V50 H150 V112 H176 V80 H214 V112 H238 V60 H270 V112 H300 V76 H336 V112 H362 V56 H392 V112 H420 V82 H456 V112 H484 V68 H516 V112 H560 V94 H600 V112 H640 V90 H676 V112 H724 V92 H760 V112 H800 V88 H840 V112 H868 V62 H902 V112 H930 V74 H966 V112 H992 V58 H1026 V112 H1050 V80 H1100 V112 Z" fill="#e8fff7" opacity=".4"/>
+        <rect x="0" y="113" width="1100" height="37" fill="#b9ecff" opacity=".22"/>
+        <path class="bike-wave" d="{_WAVES}" fill="none" stroke="#e6fbff" stroke-width="2" opacity=".55"/>
+        <path class="bike-wave slow" d="{_WAVES.replace('M-80 128', 'M-60 140')}" fill="none" stroke="#e6fbff" stroke-width="2" opacity=".35"/>
+        <path d="{_ARCHES} M610 121 H1090" fill="none" stroke="#f5fff9" stroke-width="3.5" stroke-linecap="round" opacity=".8"/>
+        <path d="M0 112.5 H1100" stroke="#fff" stroke-width="3" opacity=".75"/>
+        <g class="bike-rider"><g class="bike-bob" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          {_WHEEL.format(x=0, l=-11, r=11)}{_WHEEL.format(x=46, l=35, r=57)}
+          <path d="M0 100 L18 77 L30 100 L46 100 L29 77 H18 M22 68 H33 M29 77 L39 69"/>
+        </g></g>
+      </svg>"""
+
+
 def hero_html(metrics):
     chips = ""
     if metrics:
@@ -397,13 +440,7 @@ def hero_html(metrics):
         <p>Explore how time and weather shape city cycling. Estimate how many bikes are rented across Seoul in a selected hour.</p>
         {chips}
       </div>
-      <svg class="bike-skyline" viewBox="0 0 1100 125" role="img" aria-label="Seoul skyline and a bridge over the Han River" xmlns="http://www.w3.org/2000/svg">
-        <path d="M0 113 Q260 96 550 111 T1100 107 V125 H0Z" fill="#c5f8e8" opacity=".3"/>
-        <path d="M0 95 H55 V66 H85 V43 H125 V95 H170 V60 H209 V95 H244 V74 H285 V95 H330 V52 H368 V95 H412 V69 H448 V95 H490 V74 H515 V38 H524 V17 H529 V5 H534 V17 H540 V38 H548 V74 H574 V95 H625 V50 H659 V95 H710 V70 H748 V95 H797 V58 H832 V95 H891 V78 H928 V95 H977 V67 H1015 V95 H1100" fill="#e8fff7" opacity=".43"/>
-        <path d="M0 104 Q255 83 550 105 T1100 103" fill="none" stroke="#fff" stroke-width="3" opacity=".7"/>
-        <path d="M690 103 L725 77 L933 77 L972 103 M745 77 V103 M950 79 V103" fill="none" stroke="#f5fff9" stroke-width="4" stroke-linecap="round" opacity=".85"/>
-        <g fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="334" cy="93" r="12"/><circle cx="380" cy="93" r="12"/><path d="M334 93 L352 70 L364 93 L380 93 L363 70 H352 M356 61 H367 M363 70 L373 62"/></g>
-      </svg>
+      {SEOUL_SVG}
     </div>"""
 
 
