@@ -1,0 +1,28 @@
+{
+  "model": "HistGradientBoostingRegressor",
+  "test_mae": 91.46262309769627,
+  "test_mse": 22219.271934113338,
+  "test_rmse": 149.06130260437595,
+  "test_r2": 0.9375436788515441,
+  "test_hours": 1656,
+  "features": [
+    "hour",
+    "temp_c",
+    "humidity_pct",
+    "wind_speed_ms",
+    "visibility_10m",
+    "dew_point_c",
+    "solar_radiation_mj",
+    "rainfall_mm",
+    "snowfall_cm",
+    "seasons",
+    "day_of_week",
+    "is_weekend",
+    "is_holiday",
+    "month",
+    "hour_sin",
+    "hour_cos",
+    "is_raining",
+    "rain_prev_3h"
+  ]
+}
