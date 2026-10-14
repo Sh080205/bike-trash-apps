@@ -1,4 +1,20 @@
+---
+title: Seoul Bike Demand
+emoji: 🚲
+colorFrom: blue
+colorTo: green
+sdk: gradio
+sdk_version: 6.28.0
+python_version: "3.13"
+app_file: app.py
+pinned: false
+license: cc-by-4.0
+short_description: Predict hourly Seoul Bike rentals from weather
+---
+
 # Seoul Bike Demand app
+
+Source code, data and notebooks: https://github.com/Sh080205/seoul-bike-demand-app/tree/main/bike-regression
 
 Run this folder independently with Python 3.13:
 
