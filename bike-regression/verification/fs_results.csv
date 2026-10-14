@@ -1,0 +1,16 @@
+﻿model,method,CV MAE,std,n feature,params
+Linear Regression,Baseline,262.500093340556,3.72154619904243,59,{}
+kNN,Baseline,191.93505194805195,7.417238155613116,37,{}
+Random Forest,Baseline,119.0960700487013,4.523680173337923,36,{}
+HistGradientBoosting,Baseline,109.1834032928057,2.9273686590190335,36,{}
+Linear Regression,Filter F,262.500093340556,3.72154619904243,59,{'select__k': 59}
+Linear Regression,Filter MI,262.500093340556,3.72154619904243,59,{'select__k': 59}
+kNN,Filter MI,179.14713528138526,8.964679088588781,10,{'select__k': 10}
+Random Forest,Filter MI,119.0960700487013,4.523680173337923,36,{'select__k': 36}
+HistGradientBoosting,Filter MI,109.1834032928057,2.9273686590190335,36,{'select__k': 36}
+Linear Regression,Wrapper RFE,262.25520867907824,2.8973077442851,40,{'select__n_features_to_select': 40}
+Random Forest,Wrapper RFE,119.0960700487013,4.523680173337923,36,{'select__n_features_to_select': 36}
+HistGradientBoosting,Wrapper RFE,109.1834032928057,2.9273686590190335,36,{'select__n_features_to_select': 36}
+Linear Regression,Embedded,262.45477835606135,3.709613925690806,52,{'select__estimator__alpha': 0.3}
+Random Forest,Embedded,122.24908446969698,4.393731988505519,18,{'select__threshold': 'median'}
+HistGradientBoosting,Embedded,113.98975534602157,2.1690293959655507,18,{'select__threshold': 'median'}

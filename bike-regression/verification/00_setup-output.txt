@@ -1,0 +1,24 @@
+CELL 2
+Python 3.13.11
+numpy          pin=2.5.3    installed=2.5.3      OK
+pandas         pin=2.3.3    installed=2.3.3      OK
+scipy          pin=1.18.1   installed=1.18.1     OK
+scikit-learn   pin=1.9.1    installed=1.9.1      OK
+matplotlib     pin=3.11.2   installed=3.11.2     OK
+seaborn        pin=0.13.2   installed=0.13.2     OK
+joblib         pin=1.6.0    installed=1.6.0      OK
+ucimlrepo      pin=0.0.7    installed=0.0.7      OK
+notebook       pin=7.6.3    installed=7.6.3      OK
+ipykernel      pin=7.3.0    installed=7.3.0      OK
+nbclient       pin=0.11.0   installed=0.11.0     OK
+
+
+CELL 5
+RANDOM_STATE = 42
+TEST_FRAC    = 0.2 (สัดส่วนจำนวน 'วัน' ของ test)
+TASK         = regression
+RAW_CSV      = data\raw\seoul+bike+sharing+demand\SeoulBikeData.csv
+ขนาดไฟล์     = 604,166 bytes
+data\splits    exists=True
+figures        exists=True
+reports        exists=False

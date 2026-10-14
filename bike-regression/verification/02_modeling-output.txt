@@ -1,0 +1,453 @@
+CELL 2
+TASK = regression | RANDOM_STATE = 42
+
+
+CELL 4
+train: (7008, 14) (292 วัน) | test: (1752, 14) (73 วัน)
+missing value ใน train: {'humidity_pct': 9}
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 7008 entries, 0 to 7007
+Data columns (total 14 columns):
+ #   Column              Non-Null Count  Dtype
+---  ------              --------------  -----
+ 0   date                7008 non-null   datetime64[ns]
+ 1   rented_bike_count   7008 non-null   int64
+ 2   hour                7008 non-null   int64
+ 3   temp_c              7008 non-null   float64
+ 4   humidity_pct        6999 non-null   float64
+ 5   wind_speed_ms       7008 non-null   float64
+ 6   visibility_10m      7008 non-null   int64
+ 7   dew_point_c         7008 non-null   float64
+ 8   solar_radiation_mj  7008 non-null   float64
+ 9   rainfall_mm         7008 non-null   float64
+ 10  snowfall_cm         7008 non-null   float64
+ 11  seasons             7008 non-null   object
+ 12  holiday             7008 non-null   object
+ 13  functioning_day     7008 non-null   object
+dtypes: datetime64[ns](1), float64(7), int64(3), object(3)
+memory usage: 766.6+ KB
+
+
+CELL 7
+       ก่อน: แถว  ก่อน: วัน  ระบบเปิด: แถว  ระบบเปิด: วัน  ตัดพายุเพิ่ม: แถว  ในขอบเขต: แถว  ในขอบเขต: วัน
+split
+train       7008        292           6768            282                 96           6672            278
+test        1752         73           1697             71                 41           1656             69
+วันพายุจากประกาศภายนอก: ['2018-07-02', '2018-08-23', '2018-08-24', '2018-10-05', '2018-10-06', '2018-10-07']
+NaN ของเซนเซอร์ใน train หลังใช้กฎ (ยังไม่เติม → Pipeline ขั้น 6): {'temp_c': 1, 'dew_point_c': 5, 'humidity_pct': 17}
+
+
+CELL 10
+สัดส่วนแถวที่เป็น 1 ใน train: {'is_weekend': 0.291, 'is_holiday': 0.04, 'is_raining': 0.055}
+rain_prev_3h ใน train: nonzero = 599 | missing = 0
+
+
+CELL 10
+         date  hour  day_of_week  is_weekend  is_holiday  month  hour_sin  hour_cos  is_raining  rain_prev_3h
+0  2017-12-02     0            5           1           0     12     0.000     1.000           0           0.0
+6  2017-12-02     6            5           1           0     12     1.000     0.000           0           0.0
+12 2017-12-02    12            5           1           0     12     0.000    -1.000           0           0.0
+18 2017-12-02    18            5           1           0     12    -1.000    -0.000           0           0.0
+23 2017-12-02    23            5           1           0     12    -0.259     0.966           0           0.0
+
+CELL 13
+  คู่ชั่วโมง  |ต่าง| แบบตัวเลข 0-23  ระยะบนวงกลม (sin, cos)
+23:00 - 0:00                     23                   0.261
+ 0:00 - 1:00                      1                   0.261
+22:00 - 2:00                     20                   1.000
+0:00 - 12:00                     12                   2.000
+6:00 - 18:00                     12                   2.000
+
+
+CELL 13
+<Figure size 420x420 with 1 Axes>
+
+CELL 16
+y_train: 6,672 ค่า | mean = 760.3 | median = 586.0 | min = 2 | max = 3556 คัน/ชม.
+
+ค่าเฉลี่ย y_train แยกฤดู (คัน/ชม.):
+{'Winter': 230.3, 'Spring': 773.9, 'Autumn': 966.9, 'Summer': 1056.0}
+
+
+CELL 19
+X_train: (6672, 18) | y_train: (6672,) | groups: 278 วัน
+X_test : (1656, 18)
+features: ['hour', 'temp_c', 'humidity_pct', 'wind_speed_ms', 'visibility_10m', 'dew_point_c', 'solar_radiation_mj', 'rainfall_mm', 'snowfall_cm', 'seasons', 'day_of_week', 'is_weekend', 'is_holiday', 'month', 'hour_sin', 'hour_cos', 'is_raining', 'rain_prev_3h']
+
+
+CELL 19
+float64    10
+int64       5
+int32       2
+object      1
+Name: count, dtype: int64
+
+CELL 22
+ใน X แต่ไม่อยู่ในกลุ่มใด: ['hour']
+
+
+CELL 25
+Pipeline(steps=[('pre',
+                 ColumnTransformer(transformers=[('num',
+                                                  Pipeline(steps=[('impute',
+                                                                   SimpleImputer(strategy='median')),
+                                                                  ('scale',
+                                                                   StandardScaler())]),
+                                                  ['temp_c', 'humidity_pct',
+                                                   'wind_speed_ms',
+                                                   'visibility_10m',
+                                                   'dew_point_c',
+                                                   'solar_radiation_mj',
+                                                   'rainfall_mm', 'snowfall_cm',
+                                                   'rain_prev_3h', 'hour_sin',
+                                                   'hour_cos', 'is_weekend',
+                                                   'is_holiday',
+                                                   'is_raining']),
+                                                 ('cat',
+                                                  OneHotEncoder(handle_unknown='ignore',
+                                                                sparse_output=False),
+                                                  ['seasons', 'month',
+                                                   'day_of_week'])],
+                                   verbose_feature_names_out=False)),
+                ('select', 'passthrough'), ('model', LinearRegression())])
+
+CELL 28
+shape หลังแปลง: (6672, 37) | NaN เหลือ: 0
+ค่าที่ใช้เติม humidity_pct (median ของ train): 57.0
+seasons      ->  4 คอลัมน์ | ผลรวมต่อแถว = 1 ทุกแถว: True
+month        -> 12 คอลัมน์ | ผลรวมต่อแถว = 1 ทุกแถว: True
+day_of_week  ->  7 คอลัมน์ | ผลรวมต่อแถว = 1 ทุกแถว: True
+
+feature หลังแปลง: ['temp_c', 'humidity_pct', 'wind_speed_ms', 'visibility_10m', 'dew_point_c', 'solar_radiation_mj', 'rainfall_mm', 'snowfall_cm', 'rain_prev_3h', 'hour_sin', 'hour_cos', 'is_weekend', 'is_holiday', 'is_raining', 'seasons_Autumn', 'seasons_Spring', 'seasons_Summer', 'seasons_Winter', 'month_1', 'month_2', 'month_3', 'month_4', 'month_5', 'month_6', 'month_7', 'month_8', 'month_9', 'month_10', 'month_11', 'month_12', 'day_of_week_0', 'day_of_week_1', 'day_of_week_2', 'day_of_week_3', 'day_of_week_4', 'day_of_week_5', 'day_of_week_6']
+
+
+CELL 28
+      temp_c  humidity_pct  wind_speed_ms  visibility_10m  dew_point_c  solar_radiation_mj  rainfall_mm  snowfall_cm  rain_prev_3h  hour_sin  hour_cos  \
+mean     0.0           0.0           -0.0             0.0          0.0                 0.0         -0.0         -0.0           0.0      -0.0       0.0
+std      1.0           1.0            1.0             1.0          1.0                 1.0          1.0          1.0           1.0       1.0       1.0
+
+      is_weekend  is_holiday  is_raining
+mean         0.0         0.0         0.0
+std          1.0         1.0         1.0
+
+CELL 31
+KFold ธรรมดา fold 0: val มี 277 วัน -> ซ้ำกับ train 277 วัน
+
+
+CELL 31
+      train วัน  val วัน  วันซ้ำ train-val  scaler mean temp_c  imputer median humidity  y เฉลี่ยใน val
+fold
+0           222       56                 0              13.345                     57.0         741.240
+1           222       56                 0              13.265                     57.0         814.811
+2           222       56                 0              13.288                     57.0         741.305
+3           223       55                 0              13.208                     58.0         766.535
+4           223       55                 0              13.295                     57.0         737.402
+
+CELL 34
+                       CV MAE    std
+candidate
+Without rain history  112.153  4.232
+With rain_prev_3h     109.183  2.927
+
+MAE ราย fold (improvement บวก = feature ใหม่ดีกว่า):
+ Without rain history  With rain_prev_3h  improvement
+              114.259            107.679        6.580
+              118.982            113.914        5.068
+              111.450            110.893        0.556
+              109.472            107.961        1.511
+              106.602            105.470        1.132
+เก็บ rain_prev_3h จาก train CV: True
+
+
+CELL 38
+Baseline ใช้ทุก feature (CV บน train):
+                             MAE   MAE_std   MAE_train
+Linear Regression     262.500093  3.721546  257.334007
+kNN                   191.935052  7.417238  151.868131
+Random Forest          119.09607   4.52368   36.566767
+HistGradientBoosting  109.183403  2.927369   66.815452
+จำนวน feature หลัง preprocess: {'Linear Regression': 59, 'kNN': 37, 'Random Forest': 36, 'HistGradientBoosting': 36}
+
+
+CELL 41
+Linear Regression | Filter F: CV MAE 262.500 ± 3.722 | {'select__k': 59}
+
+
+CELL 41
+Linear Regression | Filter MI: CV MAE 262.500 ± 3.722 | {'select__k': 59}
+CV MAE (คัน/ชม.) ตามจำนวน feature ที่เลือก (k):
+    f_regression  mutual_info
+k
+5          361.5        366.5
+10         353.9        354.3
+15         318.8        345.5
+20         303.2        318.3
+30         280.2        289.5
+40         263.5        271.0
+59         262.5        262.5
+f_regression  best k = 59 | MAE = 262.5
+mutual_info   best k = 59 | MAE = 262.5
+
+
+CELL 41
+<Figure size 700x350 with 1 Axes>
+
+CELL 41
+kNN | Filter MI: CV MAE 179.147 ± 8.965 | {'select__k': 10}
+
+
+CELL 41
+Random Forest | Filter MI: CV MAE 119.096 ± 4.524 | {'select__k': 36}
+
+
+CELL 41
+HistGradientBoosting | Filter MI: CV MAE 109.183 ± 2.927 | {'select__k': 36}
+
+
+CELL 43
+10 อันดับแรกของแต่ละวิธี (คำนวณบน train ทั้งก้อน เพื่ออธิบายเท่านั้น):
+          f_regression       F         mutual_info     MI
+1               temp_c  3045.0              temp_c  0.389
+2       seasons_Winter  1781.0  solar_radiation_mj  0.208
+3          dew_point_c  1230.0      seasons_Winter  0.197
+4   solar_radiation_mj   548.0         dew_point_c  0.197
+5              hour_18   547.0        humidity_pct  0.087
+6       seasons_Summer   540.0        rain_prev_3h  0.078
+7              month_1   473.0             month_1  0.068
+8             month_12   396.0          is_raining  0.068
+9              month_2   366.0      seasons_Summer  0.066
+10             month_6   364.0      visibility_10m  0.063
+
+
+CELL 46
+Linear Regression | Wrapper RFE: CV MAE 262.255 ± 2.897 | {'select__n_features_to_select': 40}
+RFE: CV MAE ตามจำนวน feature ที่เก็บไว้
+{5: 485.1, 10: 309.8, 15: 291.4, 20: 282.8, 30: 264.7, 40: 262.3, 59: 262.5}
+best n = 40 | MAE = 262.3
+feature ที่ RFE ตัดทิ้ง: ['day_of_week_0', 'day_of_week_1', 'day_of_week_2', 'day_of_week_3', 'day_of_week_5', 'hour_9', 'is_holiday', 'is_weekend', 'month_12', 'month_4', 'month_7', 'month_9', 'rainfall_mm', 'seasons_Spring', 'seasons_Summer', 'snowfall_cm', 'solar_radiation_mj', 'visibility_10m', 'wind_speed_ms']
+
+
+CELL 46
+Random Forest | Wrapper RFE: CV MAE 119.096 ± 4.524 | {'select__n_features_to_select': 36}
+
+
+CELL 46
+HistGradientBoosting | Wrapper RFE: CV MAE 109.183 ± 2.927 | {'select__n_features_to_select': 36}
+
+
+CELL 49
+Linear Regression | Embedded: CV MAE 262.455 ± 3.710 | {'select__estimator__alpha': 0.3}
+
+
+CELL 49
+       n_kept  CV MAE
+alpha
+0.1        53   262.5
+0.3        52   262.5
+1.0        50   262.8
+3.0        38   263.4
+10.0       27   271.8
+30.0        9   341.4
+best alpha = 0.3 | MAE = 262.5
+feature ที่ Lasso ให้ coefficient = 0: ['day_of_week_0', 'day_of_week_3', 'day_of_week_5', 'month_4', 'month_7', 'month_9', 'seasons_Summer']
+coefficient ใหญ่สุด 8 ตัว (คัน/ชม. ต่อ 1 SD หรือต่อ 1 หมวด):
+{'hour_18': 823.9, 'hour_19': 538.9, 'hour_8': 487.0, 'hour_20': 438.9, 'hour_21': 434.8, 'hour_4': -421.6, 'hour_5': -405.2, 'hour_17': 376.3}
+
+
+CELL 49
+Random Forest | Embedded: CV MAE 122.249 ± 4.394 | {'select__threshold': 'median'}
+
+
+CELL 49
+HistGradientBoosting | Embedded: CV MAE 113.990 ± 2.169 | {'select__threshold': 'median'}
+
+
+CELL 52
+CV MAE: โมเดล × วิธี (ช่องว่าง = ไม่ได้ทดลอง):
+method                Baseline  Embedded  Filter F  Filter MI  Wrapper RFE
+model
+Linear Regression      262.500   262.455     262.5    262.500      262.255
+kNN                    191.935       NaN       NaN    179.147          NaN
+Random Forest          119.096   122.249       NaN    119.096      119.096
+HistGradientBoosting   109.183   113.990       NaN    109.183      109.183
+
+ผลพร้อม std, จำนวน feature และพารามิเตอร์ (refit ทั้ง train):
+                                   CV MAE    std  n feature                                params
+model                method
+Linear Regression    Baseline     262.500  3.722         59                                    {}
+kNN                  Baseline     191.935  7.417         37                                    {}
+Random Forest        Baseline     119.096  4.524         36                                    {}
+HistGradientBoosting Baseline     109.183  2.927         36                                    {}
+Linear Regression    Filter F     262.500  3.722         59                     {'select__k': 59}
+                     Filter MI    262.500  3.722         59                     {'select__k': 59}
+kNN                  Filter MI    179.147  8.965         10                     {'select__k': 10}
+Random Forest        Filter MI    119.096  4.524         36                     {'select__k': 36}
+HistGradientBoosting Filter MI    109.183  2.927         36                     {'select__k': 36}
+Linear Regression    Wrapper RFE  262.255  2.897         40  {'select__n_features_to_select': 40}
+Random Forest        Wrapper RFE  119.096  4.524         36  {'select__n_features_to_select': 36}
+HistGradientBoosting Wrapper RFE  109.183  2.927         36  {'select__n_features_to_select': 36}
+Linear Regression    Embedded     262.455  3.710         52     {'select__estimator__alpha': 0.3}
+Random Forest        Embedded     122.249  4.394         18       {'select__threshold': 'median'}
+HistGradientBoosting Embedded     113.990  2.169         18       {'select__threshold': 'median'}
+
+วิธีดีที่สุดของแต่ละโมเดล (ค่า improvement บวก = MAE ลด):
+                      best method  baseline CV MAE  best CV MAE    std  n feature  improvement selector candidate
+model
+Linear Regression     Wrapper RFE          262.500      262.255  2.897         40        0.245        Wrapper RFE
+kNN                     Filter MI          191.935      179.147  8.965         10       12.788          Filter MI
+Random Forest            Baseline          119.096      119.096  4.524         36        0.000          Filter MI
+HistGradientBoosting     Baseline          109.183      109.183  2.927         36        0.000          Filter MI
+
+
+CELL 52
+<Figure size 1100x600 with 4 Axes>
+
+CELL 55
+จำนวนคอลัมน์ก่อน PCA: 37
+สัดส่วน variance ที่อธิบายได้ PC1–PC5: [0.181, 0.149, 0.104, 0.075, 0.071]
+ต้องใช้ 14 components เพื่อให้ได้ ≥ 90% และ 19 components เพื่อให้ได้ ≥ 95%
+
+
+CELL 55
+<Figure size 700x350 with 1 Axes>
+
+CELL 58
+PC1: {'humidity_pct': 0.51, 'dew_point_c': 0.36, 'is_raining': 0.34, 'visibility_10m': -0.32, 'rain_prev_3h': 0.27}
+PC2: {'temp_c': 0.55, 'solar_radiation_mj': 0.45, 'dew_point_c': 0.43, 'hour_cos': -0.31, 'hour_sin': -0.22}
+PC3: {'rainfall_mm': 0.46, 'is_raining': 0.41, 'rain_prev_3h': 0.41, 'hour_cos': -0.3, 'wind_speed_ms': 0.3}
+
+
+CELL 61
+CV MAE (คัน/ชม.) — hour แบบ cyclic (37 คอลัมน์ก่อน PCA)
+            ไม่มี PCA  PCA 5  PCA 10  PCA 15  PCA 20  PCA 25
+model
+Linear          311.3  358.7   338.3   324.6   327.1   313.8
+kNN (k=10)      191.9  199.3   190.6   184.1   206.0   193.6
+
+
+CELL 64
+                                            MAE  MAE_std       MSE   RMSE     R2  MAE_train
+model
+Dummy (mean)                              527.6     11.8  423684.0  650.7 -0.003      527.3
+Dummy (median)                            512.6     14.1  453973.0  673.4 -0.074      512.2
+เวลาอย่างเดียว (hour × วันทำงาน/วันหยุด)  398.4     10.9  267639.0  517.2  0.365      394.0
+
+CELL 67
+                        MAE  MAE_std       MSE   RMSE     R2  MAE_train  gap (CV − train)  fit_s
+model
+Linear Regression     262.5      3.7  117602.0  342.9  0.721      257.3               5.2   0.06
+kNN                   191.9      7.4   81643.0  285.5  0.806      151.9              40.1   0.05
+Random Forest         119.1      4.5   38279.0  195.2  0.909       36.6              82.5   4.64
+HistGradientBoosting  109.2      2.9   32321.0  179.6  0.923       66.8              42.4   0.37
+
+CELL 70
+<Figure size 800x380 with 1 Axes>
+
+CELL 73
+เวลาทั้งหมด 112 วินาที
+                                 CV MAE  MAE_std                                                                                                                              best params  ก่อน tune
+model
+Linear Regression                 262.3      2.9                                                                                                                        {'select': 'RFE'}      262.5
+Linear Regression + log1p(y)      205.9     10.0                                                                                                                {'select': 'passthrough'}        NaN
+kNN                               177.1      8.8                                                                      {'n_neighbors': 10, 'weights': 'distance', 'select': 'SelectKBest'}      191.9
+kNN + log1p(y)                    176.8     10.4                                                                      {'n_neighbors': 15, 'weights': 'distance', 'select': 'SelectKBest'}        NaN
+Random Forest                     117.8      4.1                             {'select': 'passthrough', 'n_estimators': 300, 'min_samples_leaf': 1, 'max_features': 0.75, 'max_depth': 20}      119.1
+HistGradientBoosting              104.9      4.0  {'select': 'SelectKBest', 'min_samples_leaf': 5, 'max_leaf_nodes': 63, 'max_iter': 200, 'learning_rate': 0.1, 'l2_regularization': 1.0}      109.2
+HistGradientBoosting + log1p(y)   107.3      7.2                                                                                  (พารามิเตอร์และ selector เดียวกับ HGB; refit ใหม่ใน CV)        NaN
+
+
+CELL 76
+                                   select  n feature  CV MAE  ± std  fit ทั้ง train (s)  latency / 1 แถว (ms)
+model
+HistGradientBoosting          SelectKBest         36   104.9    4.0                1.74                   4.4
+Random Forest                 passthrough         36   117.8    4.1                5.77                  15.5
+kNN + log1p(y)                SelectKBest         10   176.8   10.4                1.11                   3.5
+Linear Regression + log1p(y)  passthrough         59   205.9   10.0                0.03                   3.3
+
+CELL 79
+โมเดลที่เลือก: HistGradientBoosting | CV MAE = 104.9 คัน/ชม.
+HistGradientBoostingRegressor(l2_regularization=1.0, max_iter=200,
+                              max_leaf_nodes=63, min_samples_leaf=5,
+                              random_state=42)
+
+
+CELL 82
+ค่าทำนายติดลบที่ถูก clip เป็น 0: 15 จาก 1,656 แถว
+      CV บน train (5-fold)  test ในขอบเขต
+MAE                 104.86         91.463
+MSE                    NaN      22219.272
+RMSE                   NaN        149.061
+R2                     NaN          0.938
+
+
+CELL 85
+โมเดลเดิม: HistGradientBoosting | CV MAE 104.86
+                n hours  n days      MAE         MSE     RMSE     R2  clipped  missing rain history
+scope
+In scope           1656      69   91.463   22219.272  149.061  0.938       15                     0
+Storm hours          41       2  257.649  214502.092  463.144  0.380        0                     3
+All open hours     1697      71   95.478   26864.879  163.905  0.925       15                     3
+
+ชั่วโมงวันพายุที่เพิ่ม (ยังอยู่ในวัน test เดิม):
+            n_hours   mean_y      MAE  missing_rain_history
+date
+2018-08-23       24  664.917  345.294                     0
+2018-10-06       17  943.353  133.915                     3
+
+
+CELL 88
+แยกฤดู:
+           n  mean_y    MAE  bias  MAE / mean_y (%)
+seasons
+Winter   552   211.7   51.0   2.8              24.1
+Spring   336   596.0   91.3  13.4              15.3
+Autumn   408   799.8  124.1  37.8              15.5
+Summer   360  1041.7  116.8  -1.7              11.2
+
+แยกประเภทวัน:
+             n  mean_y   MAE  bias  MAE / mean_y (%)
+day_type
+วันทำงาน  1104   681.7  98.0   8.5              14.4
+วันหยุด    552   481.6  78.3  20.9              16.3
+
+แยกฝน:
+            n  mean_y    MAE  bias  MAE / mean_y (%)
+ฝนตก       89   171.9  143.0  62.1              83.2
+ไม่มีฝน  1567   640.2   88.5   9.8              13.8
+
+
+CELL 91
+MAE สูงสุด 3 ชั่วโมง: {8: 176.0, 18: 158.0, 19: 145.0}
+MAE ต่ำสุด 3 ชั่วโมง: {4: 20.0, 5: 29.0, 3: 31.0}
+
+
+CELL 91
+<Figure size 1500x400 with 4 Axes>
+
+CELL 94
+                  date  hour seasons  temp_c  humidity_pct  rainfall_mm  day_type     y    pred  error
+1314  2018-09-24 (Mon)    18  Autumn    20.0          35.0          0.0   วันหยุด  1237  2120.0  883.0
+1039  2018-07-09 (Mon)     7  Summer    21.0          66.0          0.0  วันทำงาน   451  1284.0  833.0
+1486  2018-11-08 (Thu)    22  Autumn    12.0          96.0          0.0  วันทำงาน    14   824.0  810.0
+1040  2018-07-09 (Mon)     8  Summer    21.0          73.0          0.0  วันทำงาน   670  1459.0  789.0
+1413  2018-10-26 (Fri)    21  Autumn    11.0          70.0          0.0  วันทำงาน   542  1319.0  777.0
+835   2018-05-02 (Wed)    19  Spring    13.0          93.0          0.0  วันทำงาน   131   900.0  769.0
+1026  2018-06-22 (Fri)    18  Summer    29.0          27.0          0.0  วันทำงาน  3365  2599.0 -766.0
+1472  2018-11-08 (Thu)     8  Autumn    11.0          89.0          0.0  วันทำงาน   148   913.0  765.0
+1483  2018-11-08 (Thu)    19  Autumn    13.0          97.0          0.0  วันทำงาน    19   781.0  762.0
+752   2018-04-04 (Wed)     8  Spring    10.0          86.0          0.0  วันทำงาน  1284   534.0 -750.0
+
+CELL 97
+               date  hour  temp_c  humidity_pct  dew_point_c  rainfall_mm seasons  ทำนาย (คัน/ชม.)
+0  2018-06-13 (Wed)    18    24.0            60         15.8          0.0  Summer           2960.0
+1  2018-06-13 (Wed)    18    20.0            95         19.2          3.0  Summer            569.0
+2  2018-06-16 (Sat)    18    24.0            60         15.8          0.0  Summer           2233.0
+3  2018-01-17 (Wed)     8    -3.0            40        -14.7          0.0  Winter            605.0
+
+CELL 100
+บันทึก verification/results.json และตาราง CSV จาก kernel รอบนี้แล้ว
+
+
+CELL 102
+บันทึก app/model.joblib (621 KB)
+โหลดกลับแล้วทำนาย test 1,656 แถวได้ค่าเดิม · MAE = 91.46 คัน/ชม.

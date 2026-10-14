@@ -1,0 +1,8 @@
+﻿model,CV MAE,MAE_std,best params,ก่อน tune
+Linear Regression,262.25520867907824,2.8973077442851,{'select': 'RFE'},262.500093340556
+Linear Regression + log1p(y),205.85533425246513,9.971660471696966,{'select': 'passthrough'},
+kNN,177.10092001455237,8.831770534580928,"{'n_neighbors': 10, 'weights': 'distance', 'select': 'SelectKBest'}",191.93505194805195
+kNN + log1p(y),176.8329488989737,10.38502233527699,"{'n_neighbors': 15, 'weights': 'distance', 'select': 'SelectKBest'}",
+Random Forest,117.76972343716132,4.115467278629802,"{'select': 'passthrough', 'n_estimators': 300, 'min_samples_leaf': 1, 'max_features': 0.75, 'max_depth': 20}",119.0960700487013
+HistGradientBoosting,104.86019043472686,3.9589046765780425,"{'select': 'SelectKBest', 'min_samples_leaf': 5, 'max_leaf_nodes': 63, 'max_iter': 200, 'learning_rate': 0.1, 'l2_regularization': 1.0}",109.1834032928057
+HistGradientBoosting + log1p(y),107.31123449359868,7.209956133371122,(พารามิเตอร์และ selector เดียวกับ HGB; refit ใหม่ใน CV),
