@@ -1,4 +1,4 @@
-# สำหรับ Hugging Face Space — ต้องตรงกับเวอร์ชันที่ใช้ train (โดยเฉพาะ scikit-learn)
+# สำหรับรันแอปและ image บน Modal — ต้องตรงกับเวอร์ชันที่ใช้ train (โดยเฉพาะ scikit-learn)
 numpy==2.5.3
 pandas==2.3.3
 scikit-learn==1.9.1
