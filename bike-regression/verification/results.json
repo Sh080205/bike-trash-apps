@@ -1,0 +1,1227 @@
+{
+  "best_model": "HistGradientBoosting",
+  "features": [
+    "hour",
+    "temp_c",
+    "humidity_pct",
+    "wind_speed_ms",
+    "visibility_10m",
+    "dew_point_c",
+    "solar_radiation_mj",
+    "rainfall_mm",
+    "snowfall_cm",
+    "seasons",
+    "day_of_week",
+    "is_weekend",
+    "is_holiday",
+    "month",
+    "hour_sin",
+    "hour_cos",
+    "is_raining",
+    "rain_prev_3h"
+  ],
+  "preprocessed_dimensions": {
+    "Linear Regression": 59,
+    "kNN": 37,
+    "Random Forest": 36,
+    "HistGradientBoosting": 36
+  },
+  "test_metrics": {
+    "MAE": 91.46262309769627,
+    "MSE": 22219.271934113338,
+    "RMSE": 149.06130260437595,
+    "R2": 0.9375436788515441
+  },
+  "test_unclipped_metrics": {
+    "MAE": 91.64669814206887
+  },
+  "negative_predictions": 15,
+  "pca_90": 14,
+  "pca_95": 19,
+  "pca_cumulative": [
+    0.18134781999764518,
+    0.3303612026050497,
+    0.4348135074879989,
+    0.5095942929277487,
+    0.58048186115396,
+    0.642544621027878,
+    0.7013610470512868,
+    0.751598786876416,
+    0.7883791514797358,
+    0.8230722157326833,
+    0.851463845861664,
+    0.8726517702977583,
+    0.8916674519728957,
+    0.905848844330266,
+    0.9162364332707886,
+    0.9256487618132294,
+    0.9343027830224596,
+    0.942713377703411,
+    0.9508638400016146,
+    0.9586823904100159,
+    0.9650701602628722,
+    0.9705227387337299,
+    0.9758538325474944,
+    0.9807969238511159,
+    0.9856819990755161,
+    0.990413217094956,
+    0.9947928782566317,
+    0.9988870228482477,
+    0.9998159150731668,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0
+  ],
+  "search_parameters": {
+    "Linear Regression": {
+      "model__fit_intercept": "True",
+      "select": "RFE(estimator=Ridge(), n_features_to_select=40, step=2)"
+    },
+    "Linear Regression + log1p(y)": {
+      "regressor__model__fit_intercept": "True",
+      "regressor__select": "passthrough"
+    },
+    "kNN": {
+      "model__n_neighbors": "10",
+      "model__weights": "distance",
+      "select": "SelectKBest(score_func=functools.partial(<function mutual_info_regression>, random_state=42))"
+    },
+    "kNN + log1p(y)": {
+      "regressor__model__n_neighbors": "15",
+      "regressor__model__weights": "distance",
+      "regressor__select": "SelectKBest(score_func=functools.partial(<function mutual_info_regression>, random_state=42))"
+    },
+    "Random Forest": {
+      "select": "passthrough",
+      "model__n_estimators": "300",
+      "model__min_samples_leaf": "1",
+      "model__max_features": "0.75",
+      "model__max_depth": "20"
+    },
+    "HistGradientBoosting": {
+      "select": "SelectKBest(k=36,\n            score_func=functools.partial(<function mutual_info_regression>, random_state=42))",
+      "model__min_samples_leaf": "5",
+      "model__max_leaf_nodes": "63",
+      "model__max_iter": "200",
+      "model__learning_rate": "0.1",
+      "model__l2_regularization": "1.0"
+    },
+    "HistGradientBoosting + log1p(y)": {}
+  },
+  "tables": {
+    "scope_table": [
+      {
+        "split": "train",
+        "ก่อน: แถว": 7008,
+        "ก่อน: วัน": 292,
+        "ระบบเปิด: แถว": 6768,
+        "ระบบเปิด: วัน": 282,
+        "ตัดพายุเพิ่ม: แถว": 96,
+        "ในขอบเขต: แถว": 6672,
+        "ในขอบเขต: วัน": 278
+      },
+      {
+        "split": "test",
+        "ก่อน: แถว": 1752,
+        "ก่อน: วัน": 73,
+        "ระบบเปิด: แถว": 1697,
+        "ระบบเปิด: วัน": 71,
+        "ตัดพายุเพิ่ม: แถว": 41,
+        "ในขอบเขต: แถว": 1656,
+        "ในขอบเขต: วัน": 69
+      }
+    ],
+    "fold_table": [
+      {
+        "fold": 0,
+        "train วัน": 222,
+        "val วัน": 56,
+        "วันซ้ำ train-val": 0,
+        "scaler mean temp_c": 13.345,
+        "imputer median humidity": 57.0,
+        "y เฉลี่ยใน val": 741.24
+      },
+      {
+        "fold": 1,
+        "train วัน": 222,
+        "val วัน": 56,
+        "วันซ้ำ train-val": 0,
+        "scaler mean temp_c": 13.265,
+        "imputer median humidity": 57.0,
+        "y เฉลี่ยใน val": 814.811
+      },
+      {
+        "fold": 2,
+        "train วัน": 222,
+        "val วัน": 56,
+        "วันซ้ำ train-val": 0,
+        "scaler mean temp_c": 13.288,
+        "imputer median humidity": 57.0,
+        "y เฉลี่ยใน val": 741.305
+      },
+      {
+        "fold": 3,
+        "train วัน": 223,
+        "val วัน": 55,
+        "วันซ้ำ train-val": 0,
+        "scaler mean temp_c": 13.208,
+        "imputer median humidity": 58.0,
+        "y เฉลี่ยใน val": 766.535
+      },
+      {
+        "fold": 4,
+        "train วัน": 223,
+        "val วัน": 55,
+        "วันซ้ำ train-val": 0,
+        "scaler mean temp_c": 13.295,
+        "imputer median humidity": 57.0,
+        "y เฉลี่ยใน val": 737.402
+      }
+    ],
+    "rain_feature_cv": [
+      {
+        "candidate": "Without rain history",
+        "CV MAE": 112.1529392883,
+        "std": 4.2323873437
+      },
+      {
+        "candidate": "With rain_prev_3h",
+        "CV MAE": 109.1834032928,
+        "std": 2.927368659
+      }
+    ],
+    "rain_fold_cv": [
+      {
+        "index": 0,
+        "Without rain history": 114.2590193753,
+        "With rain_prev_3h": 107.678928956,
+        "improvement": 6.5800904193
+      },
+      {
+        "index": 1,
+        "Without rain history": 118.9819038485,
+        "With rain_prev_3h": 113.9137620361,
+        "improvement": 5.0681418124
+      },
+      {
+        "index": 2,
+        "Without rain history": 111.4497594468,
+        "With rain_prev_3h": 110.8933361813,
+        "improvement": 0.5564232655
+      },
+      {
+        "index": 3,
+        "Without rain history": 109.4720890887,
+        "With rain_prev_3h": 107.961023206,
+        "improvement": 1.5110658827
+      },
+      {
+        "index": 4,
+        "Without rain history": 106.6019246824,
+        "With rain_prev_3h": 105.4699660846,
+        "improvement": 1.1319585978
+      }
+    ],
+    "k_table": [
+      {
+        "k": 5,
+        "f_regression": 361.5,
+        "mutual_info": 366.5
+      },
+      {
+        "k": 10,
+        "f_regression": 353.9,
+        "mutual_info": 354.3
+      },
+      {
+        "k": 15,
+        "f_regression": 318.8,
+        "mutual_info": 345.5
+      },
+      {
+        "k": 20,
+        "f_regression": 303.2,
+        "mutual_info": 318.3
+      },
+      {
+        "k": 30,
+        "f_regression": 280.2,
+        "mutual_info": 289.5
+      },
+      {
+        "k": 40,
+        "f_regression": 263.5,
+        "mutual_info": 271.0
+      },
+      {
+        "k": 59,
+        "f_regression": 262.5,
+        "mutual_info": 262.5
+      }
+    ],
+    "lasso_table": [
+      {
+        "alpha": 0.1,
+        "n_kept": 53,
+        "CV MAE": 262.5
+      },
+      {
+        "alpha": 0.3,
+        "n_kept": 52,
+        "CV MAE": 262.5
+      },
+      {
+        "alpha": 1.0,
+        "n_kept": 50,
+        "CV MAE": 262.8
+      },
+      {
+        "alpha": 3.0,
+        "n_kept": 38,
+        "CV MAE": 263.4
+      },
+      {
+        "alpha": 10.0,
+        "n_kept": 27,
+        "CV MAE": 271.8
+      },
+      {
+        "alpha": 30.0,
+        "n_kept": 9,
+        "CV MAE": 341.4
+      }
+    ],
+    "fs_summary": [
+      {
+        "วิธี": "ไม่เลือก (ทุก feature)",
+        "พารามิเตอร์": "-",
+        "n feature": 59,
+        "CV MAE": 262.5
+      },
+      {
+        "วิธี": "Filter f_regression",
+        "พารามิเตอร์": "k=59",
+        "n feature": 59,
+        "CV MAE": 262.5
+      },
+      {
+        "วิธี": "Filter mutual_info",
+        "พารามิเตอร์": "k=59",
+        "n feature": 59,
+        "CV MAE": 262.5
+      },
+      {
+        "วิธี": "Wrapper RFE (Ridge)",
+        "พารามิเตอร์": "n=40",
+        "n feature": 40,
+        "CV MAE": 262.3
+      },
+      {
+        "วิธี": "Embedded Lasso",
+        "พารามิเตอร์": "alpha=0.3",
+        "n feature": 52,
+        "CV MAE": 262.5
+      }
+    ],
+    "fs_results": [
+      {
+        "model": "Linear Regression",
+        "method": "Baseline",
+        "CV MAE": 262.5000933406,
+        "std": 3.721546199,
+        "n feature": 59,
+        "params": {}
+      },
+      {
+        "model": "kNN",
+        "method": "Baseline",
+        "CV MAE": 191.9350519481,
+        "std": 7.4172381556,
+        "n feature": 37,
+        "params": {}
+      },
+      {
+        "model": "Random Forest",
+        "method": "Baseline",
+        "CV MAE": 119.0960700487,
+        "std": 4.5236801733,
+        "n feature": 36,
+        "params": {}
+      },
+      {
+        "model": "HistGradientBoosting",
+        "method": "Baseline",
+        "CV MAE": 109.1834032928,
+        "std": 2.927368659,
+        "n feature": 36,
+        "params": {}
+      },
+      {
+        "model": "Linear Regression",
+        "method": "Filter F",
+        "CV MAE": 262.5000933406,
+        "std": 3.721546199,
+        "n feature": 59,
+        "params": {
+          "select__k": 59
+        }
+      },
+      {
+        "model": "Linear Regression",
+        "method": "Filter MI",
+        "CV MAE": 262.5000933406,
+        "std": 3.721546199,
+        "n feature": 59,
+        "params": {
+          "select__k": 59
+        }
+      },
+      {
+        "model": "kNN",
+        "method": "Filter MI",
+        "CV MAE": 179.1471352814,
+        "std": 8.9646790886,
+        "n feature": 10,
+        "params": {
+          "select__k": 10
+        }
+      },
+      {
+        "model": "Random Forest",
+        "method": "Filter MI",
+        "CV MAE": 119.0960700487,
+        "std": 4.5236801733,
+        "n feature": 36,
+        "params": {
+          "select__k": 36
+        }
+      },
+      {
+        "model": "HistGradientBoosting",
+        "method": "Filter MI",
+        "CV MAE": 109.1834032928,
+        "std": 2.927368659,
+        "n feature": 36,
+        "params": {
+          "select__k": 36
+        }
+      },
+      {
+        "model": "Linear Regression",
+        "method": "Wrapper RFE",
+        "CV MAE": 262.2552086791,
+        "std": 2.8973077443,
+        "n feature": 40,
+        "params": {
+          "select__n_features_to_select": 40
+        }
+      },
+      {
+        "model": "Random Forest",
+        "method": "Wrapper RFE",
+        "CV MAE": 119.0960700487,
+        "std": 4.5236801733,
+        "n feature": 36,
+        "params": {
+          "select__n_features_to_select": 36
+        }
+      },
+      {
+        "model": "HistGradientBoosting",
+        "method": "Wrapper RFE",
+        "CV MAE": 109.1834032928,
+        "std": 2.927368659,
+        "n feature": 36,
+        "params": {
+          "select__n_features_to_select": 36
+        }
+      },
+      {
+        "model": "Linear Regression",
+        "method": "Embedded",
+        "CV MAE": 262.4547783561,
+        "std": 3.7096139257,
+        "n feature": 52,
+        "params": {
+          "select__estimator__alpha": 0.3
+        }
+      },
+      {
+        "model": "Random Forest",
+        "method": "Embedded",
+        "CV MAE": 122.2490844697,
+        "std": 4.3937319885,
+        "n feature": 18,
+        "params": {
+          "select__threshold": "median"
+        }
+      },
+      {
+        "model": "HistGradientBoosting",
+        "method": "Embedded",
+        "CV MAE": 113.989755346,
+        "std": 2.169029396,
+        "n feature": 18,
+        "params": {
+          "select__threshold": "median"
+        }
+      }
+    ],
+    "fs_choices": [
+      {
+        "model": "Linear Regression",
+        "best method": "Wrapper RFE",
+        "baseline CV MAE": 262.5000933406,
+        "best CV MAE": 262.2552086791,
+        "std": 2.8973077443,
+        "n feature": 40,
+        "improvement": 0.2448846615,
+        "selector candidate": "Wrapper RFE"
+      },
+      {
+        "model": "kNN",
+        "best method": "Filter MI",
+        "baseline CV MAE": 191.9350519481,
+        "best CV MAE": 179.1471352814,
+        "std": 8.9646790886,
+        "n feature": 10,
+        "improvement": 12.7879166667,
+        "selector candidate": "Filter MI"
+      },
+      {
+        "model": "Random Forest",
+        "best method": "Baseline",
+        "baseline CV MAE": 119.0960700487,
+        "best CV MAE": 119.0960700487,
+        "std": 4.5236801733,
+        "n feature": 36,
+        "improvement": 0.0,
+        "selector candidate": "Filter MI"
+      },
+      {
+        "model": "HistGradientBoosting",
+        "best method": "Baseline",
+        "baseline CV MAE": 109.1834032928,
+        "best CV MAE": 109.1834032928,
+        "std": 2.927368659,
+        "n feature": 36,
+        "improvement": 0.0,
+        "selector candidate": "Filter MI"
+      }
+    ],
+    "pca_table": [
+      {
+        "model": "Linear",
+        "ไม่มี PCA": 311.3,
+        "PCA 5": 358.7,
+        "PCA 10": 338.3,
+        "PCA 15": 324.6,
+        "PCA 20": 327.1,
+        "PCA 25": 313.8
+      },
+      {
+        "model": "kNN (k=10)",
+        "ไม่มี PCA": 191.9,
+        "PCA 5": 199.3,
+        "PCA 10": 190.6,
+        "PCA 15": 184.1,
+        "PCA 20": 206.0,
+        "PCA 25": 193.6
+      }
+    ],
+    "baselines": [
+      {
+        "model": "Dummy (mean)",
+        "MAE": 527.593,
+        "MAE_std": 11.824,
+        "MSE": 423684.064,
+        "RMSE": 650.667,
+        "R2": -0.003,
+        "MAE_train": 527.318,
+        "fit_s": 0.002
+      },
+      {
+        "model": "Dummy (median)",
+        "MAE": 512.57,
+        "MAE_std": 14.054,
+        "MSE": 453973.267,
+        "RMSE": 673.352,
+        "R2": -0.074,
+        "MAE_train": 512.157,
+        "fit_s": 0.002
+      },
+      {
+        "model": "เวลาอย่างเดียว (hour × วันทำงาน/วันหยุด)",
+        "MAE": 398.402,
+        "MAE_std": 10.855,
+        "MSE": 267639.271,
+        "RMSE": 517.155,
+        "R2": 0.365,
+        "MAE_train": 394.011,
+        "fit_s": 0.004
+      }
+    ],
+    "compare": [
+      {
+        "model": "Linear Regression",
+        "MAE": 262.5000933406,
+        "MAE_std": 3.721546199,
+        "MSE": 117601.5449895921,
+        "RMSE": 342.8787217536,
+        "R2": 0.7211508273,
+        "MAE_train": 257.3340074796,
+        "fit_s": 0.0599951267,
+        "gap (CV − train)": 5.166085861
+      },
+      {
+        "model": "kNN",
+        "MAE": 191.9350519481,
+        "MAE_std": 7.4172381556,
+        "MSE": 81642.7922337662,
+        "RMSE": 285.5103484329,
+        "R2": 0.8063240661,
+        "MAE_train": 151.8681311356,
+        "fit_s": 0.0465296745,
+        "gap (CV − train)": 40.0669208124
+      },
+      {
+        "model": "Random Forest",
+        "MAE": 119.0960700487,
+        "MAE_std": 4.5236801733,
+        "MSE": 38279.353059692,
+        "RMSE": 195.2372523633,
+        "R2": 0.9091669178,
+        "MAE_train": 36.5667670846,
+        "fit_s": 4.6429423809,
+        "gap (CV − train)": 82.5293029641
+      },
+      {
+        "model": "HistGradientBoosting",
+        "MAE": 109.1834032928,
+        "MAE_std": 2.927368659,
+        "MSE": 32321.2265034839,
+        "RMSE": 179.5940252125,
+        "R2": 0.9232362085,
+        "MAE_train": 66.8154519187,
+        "fit_s": 0.3684035778,
+        "gap (CV − train)": 42.3679513741
+      }
+    ],
+    "tuned": [
+      {
+        "model": "Linear Regression",
+        "CV MAE": 262.2552086791,
+        "MAE_std": 2.8973077443,
+        "best params": {
+          "select": "RFE"
+        },
+        "ก่อน tune": 262.5000933406
+      },
+      {
+        "model": "Linear Regression + log1p(y)",
+        "CV MAE": 205.8553342525,
+        "MAE_std": 9.9716604717,
+        "best params": {
+          "select": "passthrough"
+        },
+        "ก่อน tune": null
+      },
+      {
+        "model": "kNN",
+        "CV MAE": 177.1009200146,
+        "MAE_std": 8.8317705346,
+        "best params": {
+          "n_neighbors": 10,
+          "weights": "distance",
+          "select": "SelectKBest"
+        },
+        "ก่อน tune": 191.9350519481
+      },
+      {
+        "model": "kNN + log1p(y)",
+        "CV MAE": 176.832948899,
+        "MAE_std": 10.3850223353,
+        "best params": {
+          "n_neighbors": 15,
+          "weights": "distance",
+          "select": "SelectKBest"
+        },
+        "ก่อน tune": null
+      },
+      {
+        "model": "Random Forest",
+        "CV MAE": 117.7697234372,
+        "MAE_std": 4.1154672786,
+        "best params": {
+          "select": "passthrough",
+          "n_estimators": 300,
+          "min_samples_leaf": 1,
+          "max_features": 0.75,
+          "max_depth": 20
+        },
+        "ก่อน tune": 119.0960700487
+      },
+      {
+        "model": "HistGradientBoosting",
+        "CV MAE": 104.8601904347,
+        "MAE_std": 3.9589046766,
+        "best params": {
+          "select": "SelectKBest",
+          "min_samples_leaf": 5,
+          "max_leaf_nodes": 63,
+          "max_iter": 200,
+          "learning_rate": 0.1,
+          "l2_regularization": 1.0
+        },
+        "ก่อน tune": 109.1834032928
+      },
+      {
+        "model": "HistGradientBoosting + log1p(y)",
+        "CV MAE": 107.3112344936,
+        "MAE_std": 7.2099561334,
+        "best params": "(พารามิเตอร์และ selector เดียวกับ HGB; refit ใหม่ใน CV)",
+        "ก่อน tune": null
+      }
+    ],
+    "clo4": [
+      {
+        "model": "HistGradientBoosting",
+        "select": "SelectKBest",
+        "n feature": 36,
+        "CV MAE": 104.8601904347,
+        "± std": 3.9589046766,
+        "fit ทั้ง train (s)": 1.7412285,
+        "latency / 1 แถว (ms)": 4.44565
+      },
+      {
+        "model": "Random Forest",
+        "select": "passthrough",
+        "n feature": 36,
+        "CV MAE": 117.7697234372,
+        "± std": 4.1154672786,
+        "fit ทั้ง train (s)": 5.7712496,
+        "latency / 1 แถว (ms)": 15.5064999999
+      },
+      {
+        "model": "kNN + log1p(y)",
+        "select": "SelectKBest",
+        "n feature": 10,
+        "CV MAE": 176.832948899,
+        "± std": 10.3850223353,
+        "fit ทั้ง train (s)": 1.1072939,
+        "latency / 1 แถว (ms)": 3.5278999967
+      },
+      {
+        "model": "Linear Regression + log1p(y)",
+        "select": "passthrough",
+        "n feature": 59,
+        "CV MAE": 205.8553342525,
+        "± std": 9.9716604717,
+        "fit ทั้ง train (s)": 0.0250475,
+        "latency / 1 แถว (ms)": 3.2887999951
+      }
+    ],
+    "scope_sensitivity": [
+      {
+        "scope": "In scope",
+        "n hours": 1656,
+        "n days": 69,
+        "MAE": 91.4626230977,
+        "MSE": 22219.2719341133,
+        "RMSE": 149.0613026044,
+        "R2": 0.9375436789,
+        "clipped": 15,
+        "missing rain history": 0
+      },
+      {
+        "scope": "Storm hours",
+        "n hours": 41,
+        "n days": 2,
+        "MAE": 257.6489484391,
+        "MSE": 214502.0916551727,
+        "RMSE": 463.1437051879,
+        "R2": 0.3798658628,
+        "clipped": 0,
+        "missing rain history": 3
+      },
+      {
+        "scope": "All open hours",
+        "n hours": 1697,
+        "n days": 71,
+        "MAE": 95.4777317241,
+        "MSE": 26864.8792461719,
+        "RMSE": 163.9050921911,
+        "R2": 0.9245714876,
+        "clipped": 15,
+        "missing rain history": 3
+      }
+    ],
+    "storm_day_sensitivity": [
+      {
+        "date": "2018-08-23T00:00:00.000",
+        "n_hours": 24,
+        "mean_y": 664.9166666667,
+        "MAE": 345.2940860464,
+        "missing_rain_history": 0
+      },
+      {
+        "date": "2018-10-06T00:00:00.000",
+        "n_hours": 17,
+        "mean_y": 943.3529411765,
+        "MAE": 133.9146365228,
+        "missing_rain_history": 3
+      }
+    ],
+    "by_hour": [
+      {
+        "hour": 0,
+        "abs_error": 72.4785197629,
+        "y": 487.2028985507
+      },
+      {
+        "hour": 1,
+        "abs_error": 53.8234248328,
+        "y": 367.2608695652
+      },
+      {
+        "hour": 2,
+        "abs_error": 44.3364594128,
+        "y": 258.0579710145
+      },
+      {
+        "hour": 3,
+        "abs_error": 31.2812103323,
+        "y": 173.1014492754
+      },
+      {
+        "hour": 4,
+        "abs_error": 20.0363147458,
+        "y": 113.6956521739
+      },
+      {
+        "hour": 5,
+        "abs_error": 28.6022325781,
+        "y": 126.6666666667
+      },
+      {
+        "hour": 6,
+        "abs_error": 48.4664612835,
+        "y": 264.6811594203
+      },
+      {
+        "hour": 7,
+        "abs_error": 130.3114707195,
+        "y": 550.5507246377
+      },
+      {
+        "hour": 8,
+        "abs_error": 175.8048196067,
+        "y": 917.2028985507
+      },
+      {
+        "hour": 9,
+        "abs_error": 105.9903406337,
+        "y": 569.9710144928
+      },
+      {
+        "hour": 10,
+        "abs_error": 80.5794846894,
+        "y": 462.2608695652
+      },
+      {
+        "hour": 11,
+        "abs_error": 88.4862374,
+        "y": 522.5362318841
+      },
+      {
+        "hour": 12,
+        "abs_error": 96.6788779741,
+        "y": 600.0144927536
+      },
+      {
+        "hour": 13,
+        "abs_error": 83.5525693506,
+        "y": 627.2898550725
+      },
+      {
+        "hour": 14,
+        "abs_error": 86.2652994196,
+        "y": 651.1594202899
+      },
+      {
+        "hour": 15,
+        "abs_error": 93.4441674247,
+        "y": 711.8115942029
+      },
+      {
+        "hour": 16,
+        "abs_error": 111.4307474318,
+        "y": 793.7391304348
+      },
+      {
+        "hour": 17,
+        "abs_error": 102.9331896213,
+        "y": 989.1449275362
+      },
+      {
+        "hour": 18,
+        "abs_error": 157.5563389036,
+        "y": 1319.231884058
+      },
+      {
+        "hour": 19,
+        "abs_error": 145.1693814656,
+        "y": 1039.7391304348
+      },
+      {
+        "hour": 20,
+        "abs_error": 113.5490270654,
+        "y": 927.1594202899
+      },
+      {
+        "hour": 21,
+        "abs_error": 119.0978036676,
+        "y": 900.347826087
+      },
+      {
+        "hour": 22,
+        "abs_error": 111.5625423019,
+        "y": 806.6956521739
+      },
+      {
+        "hour": 23,
+        "abs_error": 93.6660337209,
+        "y": 580.5072463768
+      }
+    ],
+    "worst": [
+      {
+        "index": 1314,
+        "date": "2018-09-24T00:00:00.000",
+        "hour": 18,
+        "seasons": "Autumn",
+        "temp_c": 20.3,
+        "humidity_pct": 35.0,
+        "rainfall_mm": 0.0,
+        "is_weekend": 0,
+        "is_holiday": 1,
+        "y": 1237,
+        "pred": 2120.4276896621,
+        "error": 883.4276896621,
+        "abs_error": 883.4276896621,
+        "day_type": "วันหยุด"
+      },
+      {
+        "index": 1039,
+        "date": "2018-07-09T00:00:00.000",
+        "hour": 7,
+        "seasons": "Summer",
+        "temp_c": 20.9,
+        "humidity_pct": 66.0,
+        "rainfall_mm": 0.0,
+        "is_weekend": 0,
+        "is_holiday": 0,
+        "y": 451,
+        "pred": 1284.1207570116,
+        "error": 833.1207570116,
+        "abs_error": 833.1207570116,
+        "day_type": "วันทำงาน"
+      },
+      {
+        "index": 1486,
+        "date": "2018-11-08T00:00:00.000",
+        "hour": 22,
+        "seasons": "Autumn",
+        "temp_c": 12.4,
+        "humidity_pct": 96.0,
+        "rainfall_mm": 0.0,
+        "is_weekend": 0,
+        "is_holiday": 0,
+        "y": 14,
+        "pred": 824.4728556757,
+        "error": 810.4728556757,
+        "abs_error": 810.4728556757,
+        "day_type": "วันทำงาน"
+      },
+      {
+        "index": 1040,
+        "date": "2018-07-09T00:00:00.000",
+        "hour": 8,
+        "seasons": "Summer",
+        "temp_c": 20.7,
+        "humidity_pct": 73.0,
+        "rainfall_mm": 0.2,
+        "is_weekend": 0,
+        "is_holiday": 0,
+        "y": 670,
+        "pred": 1459.2422570751,
+        "error": 789.2422570751,
+        "abs_error": 789.2422570751,
+        "day_type": "วันทำงาน"
+      },
+      {
+        "index": 1413,
+        "date": "2018-10-26T00:00:00.000",
+        "hour": 21,
+        "seasons": "Autumn",
+        "temp_c": 10.6,
+        "humidity_pct": 70.0,
+        "rainfall_mm": 0.0,
+        "is_weekend": 0,
+        "is_holiday": 0,
+        "y": 542,
+        "pred": 1319.3893765735,
+        "error": 777.3893765735,
+        "abs_error": 777.3893765735,
+        "day_type": "วันทำงาน"
+      },
+      {
+        "index": 835,
+        "date": "2018-05-02T00:00:00.000",
+        "hour": 19,
+        "seasons": "Spring",
+        "temp_c": 12.6,
+        "humidity_pct": 93.0,
+        "rainfall_mm": 0.0,
+        "is_weekend": 0,
+        "is_holiday": 0,
+        "y": 131,
+        "pred": 900.4780934172,
+        "error": 769.4780934172,
+        "abs_error": 769.4780934172,
+        "day_type": "วันทำงาน"
+      },
+      {
+        "index": 1026,
+        "date": "2018-06-22T00:00:00.000",
+        "hour": 18,
+        "seasons": "Summer",
+        "temp_c": 29.3,
+        "humidity_pct": 27.0,
+        "rainfall_mm": 0.0,
+        "is_weekend": 0,
+        "is_holiday": 0,
+        "y": 3365,
+        "pred": 2599.1300822345,
+        "error": -765.8699177655,
+        "abs_error": 765.8699177655,
+        "day_type": "วันทำงาน"
+      },
+      {
+        "index": 1472,
+        "date": "2018-11-08T00:00:00.000",
+        "hour": 8,
+        "seasons": "Autumn",
+        "temp_c": 10.6,
+        "humidity_pct": 89.0,
+        "rainfall_mm": 0.0,
+        "is_weekend": 0,
+        "is_holiday": 0,
+        "y": 148,
+        "pred": 912.9899849522,
+        "error": 764.9899849522,
+        "abs_error": 764.9899849522,
+        "day_type": "วันทำงาน"
+      },
+      {
+        "index": 1483,
+        "date": "2018-11-08T00:00:00.000",
+        "hour": 19,
+        "seasons": "Autumn",
+        "temp_c": 12.8,
+        "humidity_pct": 97.0,
+        "rainfall_mm": 0.0,
+        "is_weekend": 0,
+        "is_holiday": 0,
+        "y": 19,
+        "pred": 781.2542414415,
+        "error": 762.2542414415,
+        "abs_error": 762.2542414415,
+        "day_type": "วันทำงาน"
+      },
+      {
+        "index": 752,
+        "date": "2018-04-04T00:00:00.000",
+        "hour": 8,
+        "seasons": "Spring",
+        "temp_c": 10.3,
+        "humidity_pct": 86.0,
+        "rainfall_mm": 0.0,
+        "is_weekend": 0,
+        "is_holiday": 0,
+        "y": 1284,
+        "pred": 534.2813107779,
+        "error": -749.7186892221,
+        "abs_error": 749.7186892221,
+        "day_type": "วันทำงาน"
+      }
+    ],
+    "scenarios": [
+      {
+        "index": 0,
+        "date": "2018-06-13T00:00:00.000",
+        "hour": 18,
+        "temp_c": 24.0,
+        "humidity_pct": 60,
+        "wind_speed_ms": 1.5,
+        "visibility_10m": 2000,
+        "solar_radiation_mj": 0.5,
+        "rainfall_mm": 0.0,
+        "snowfall_cm": 0.0,
+        "seasons": "Summer",
+        "holiday": "No Holiday",
+        "dew_point_c": 15.8,
+        "functioning_day": "Yes",
+        "rain_prev_3h": 0.0,
+        "ทำนาย (คัน/ชม.)": 2960.0
+      },
+      {
+        "index": 1,
+        "date": "2018-06-13T00:00:00.000",
+        "hour": 18,
+        "temp_c": 20.0,
+        "humidity_pct": 95,
+        "wind_speed_ms": 1.5,
+        "visibility_10m": 300,
+        "solar_radiation_mj": 0.1,
+        "rainfall_mm": 3.0,
+        "snowfall_cm": 0.0,
+        "seasons": "Summer",
+        "holiday": "No Holiday",
+        "dew_point_c": 19.2,
+        "functioning_day": "Yes",
+        "rain_prev_3h": 0.0,
+        "ทำนาย (คัน/ชม.)": 569.0
+      },
+      {
+        "index": 2,
+        "date": "2018-06-16T00:00:00.000",
+        "hour": 18,
+        "temp_c": 24.0,
+        "humidity_pct": 60,
+        "wind_speed_ms": 1.5,
+        "visibility_10m": 2000,
+        "solar_radiation_mj": 0.5,
+        "rainfall_mm": 0.0,
+        "snowfall_cm": 0.0,
+        "seasons": "Summer",
+        "holiday": "No Holiday",
+        "dew_point_c": 15.8,
+        "functioning_day": "Yes",
+        "rain_prev_3h": 0.0,
+        "ทำนาย (คัน/ชม.)": 2233.0
+      },
+      {
+        "index": 3,
+        "date": "2018-01-17T00:00:00.000",
+        "hour": 8,
+        "temp_c": -3.0,
+        "humidity_pct": 40,
+        "wind_speed_ms": 1.5,
+        "visibility_10m": 2000,
+        "solar_radiation_mj": 0.1,
+        "rainfall_mm": 0.0,
+        "snowfall_cm": 0.0,
+        "seasons": "Winter",
+        "holiday": "No Holiday",
+        "dew_point_c": -14.7,
+        "functioning_day": "Yes",
+        "rain_prev_3h": 0.0,
+        "ทำนาย (คัน/ชม.)": 605.0
+      }
+    ],
+    "season_errors": [
+      {
+        "seasons": "Autumn",
+        "n": 408,
+        "mean_y": 799.8,
+        "MAE": 124.1,
+        "bias": 37.8,
+        "MAE / mean_y (%)": 15.5
+      },
+      {
+        "seasons": "Spring",
+        "n": 336,
+        "mean_y": 596.0,
+        "MAE": 91.3,
+        "bias": 13.4,
+        "MAE / mean_y (%)": 15.3
+      },
+      {
+        "seasons": "Summer",
+        "n": 360,
+        "mean_y": 1041.7,
+        "MAE": 116.8,
+        "bias": -1.7,
+        "MAE / mean_y (%)": 11.2
+      },
+      {
+        "seasons": "Winter",
+        "n": 552,
+        "mean_y": 211.7,
+        "MAE": 51.0,
+        "bias": 2.8,
+        "MAE / mean_y (%)": 24.1
+      }
+    ],
+    "day_errors": [
+      {
+        "day_type": "วันทำงาน",
+        "n": 1104,
+        "mean_y": 681.7,
+        "MAE": 98.0,
+        "bias": 8.5,
+        "MAE / mean_y (%)": 14.4
+      },
+      {
+        "day_type": "วันหยุด",
+        "n": 552,
+        "mean_y": 481.6,
+        "MAE": 78.3,
+        "bias": 20.9,
+        "MAE / mean_y (%)": 16.3
+      }
+    ],
+    "rain_errors": [
+      {
+        "index": "ฝนตก",
+        "n": 89,
+        "mean_y": 171.9,
+        "MAE": 143.0,
+        "bias": 62.1,
+        "MAE / mean_y (%)": 83.2
+      },
+      {
+        "index": "ไม่มีฝน",
+        "n": 1567,
+        "mean_y": 640.2,
+        "MAE": 88.5,
+        "bias": 9.8,
+        "MAE / mean_y (%)": 13.8
+      }
+    ]
+  },
+  "sha256": {
+    "config.py": "9e6ea105059c5c80b5e8a56550e45ec9c37a9601f99eb7579033a2ad96ba9f44",
+    "requirements.txt": "ccd9e61dbfdb90cc72d2be3ed39c3e182658010717d5f3fe90d3547f26d6a0bb",
+    "figures\\04_correlation.png": "75bc87c09e7ec8a8b0938e1f71a262f162c2be58d1e48c4b5e2a8b0bcaad7aca",
+    "figures\\04_daily_outlier_review.png": "7120308cd95c54a24e977afa18f9ad65de3ba98d38ecb4abc8922940e836b8a3",
+    "figures\\04_day_of_week.png": "c6c93d10180f921c2447a0d6f30346f7fee448aefd2b024d20a36d5e5b75fe7e",
+    "figures\\04_hourly_by_daytype.png": "fad7a76052380e17fcf0ec24ab61740166c841bdec46b8e7c84c03b8c43d14e0",
+    "figures\\04_rainfall.png": "d2e8f5251792846114c5e528dff05e9d2413b29a586dc0af1a41e9ba5a78f46b",
+    "figures\\04_season_temperature.png": "f42e8a286647fa06958ff22a04921564a289b9fc3b3179f507c300ac74fa5a27",
+    "figures\\04_target_distribution.png": "e0d73b88e1871ec14cc343fa83a5f7570abf7dc87fad4b77b0ddc19d58e09a2a",
+    "figures\\04_target_operating_hours.png": "f75005d024b2f31daa15f8532cf7ce042417375991ff323ba4559952f81dfb8a",
+    "figures\\05_hour_cyclic.png": "6cf5f3290e8489adbdf0ece21b4bfc248f46153aa845f8159ce816c0c670ffcd",
+    "figures\\07_filter_k.png": "b76ffd6de2bd5cce84ecd8eb62cb924870c3e0a5bcdb0046345a073fac00dc25",
+    "figures\\07_model_feature_selection.png": "47543951bae5442a49d11c3661d884b015023c8d965e15f3f3cea8e0dce9648e",
+    "figures\\08_pca_variance.png": "7033ec096c58a3dccc97125fd10705abd190860b4621b03cdda091d008599ebf",
+    "figures\\10_model_comparison.png": "2879a9ee0dac12480207e18febe5a6e69ef19b021f1404d4ac305dcd2b32b609",
+    "figures\\13_test_errors.png": "9013658641f3ab26e4ef369bc0db3c7bf6d15ce60f7b51b88464133077843f77"
+  }
+}

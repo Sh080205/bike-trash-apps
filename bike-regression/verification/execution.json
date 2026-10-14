@@ -1,0 +1,25 @@
+{
+  "started_utc": "2026-10-14T17:01:38.996440+00:00",
+  "python": "3.13.11",
+  "system": "Windows-11-10.0.26200-SP0",
+  "notebooks": [
+    {
+      "name": "00_setup",
+      "seconds": 1.3260325000010198,
+      "code_cells": 2,
+      "status": "passed"
+    },
+    {
+      "name": "01_eda",
+      "seconds": 8.306712300000072,
+      "code_cells": 23,
+      "status": "passed"
+    },
+    {
+      "name": "02_modeling",
+      "seconds": 215.76137239999662,
+      "code_cells": 35,
+      "status": "passed"
+    }
+  ]
+}

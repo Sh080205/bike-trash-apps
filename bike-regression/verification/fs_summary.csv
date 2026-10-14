@@ -1,0 +1,6 @@
+﻿วิธี,พารามิเตอร์,n feature,CV MAE
+ไม่เลือก (ทุก feature),-,59,262.5
+Filter f_regression,k=59,59,262.5
+Filter mutual_info,k=59,59,262.5
+Wrapper RFE (Ridge),n=40,40,262.3
+Embedded Lasso,alpha=0.3,52,262.5
