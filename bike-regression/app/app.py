@@ -46,6 +46,51 @@ TRAIN_RANGES = {
 }
 DAY_NAMES = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 
+# Slider limits cover the hourly values seen in the data (Seoul, Dec 2017 - Nov 2018),
+# so every reachable input is a condition the city actually had.
+WEATHER_SLIDERS = {
+    "temp": dict(label="🌡️ Temperature (°C)", minimum=-17, maximum=40, step=0.5, value=24,
+                 info="Seoul ranged from −17 to 40 °C."),
+    "humidity": dict(label="💧 Humidity (%)", minimum=10, maximum=100, step=1, value=60),
+    "rainfall": dict(label="🌧️ Rainfall this hour (mm)", minimum=0, maximum=35, step=0.1, value=0,
+                     info="0 = dry · 3 mm ≈ steady rain"),
+    "wind": dict(label="💨 Wind speed (m/s)", minimum=0, maximum=7.5, step=0.1, value=1.5),
+    "visibility": dict(label="👁️ Visibility (× 10 m)", minimum=20, maximum=2000, step=10, value=2000,
+                       info="2,000 = 20 km, a clear day."),
+    "solar": dict(label="☀️ Solar radiation (MJ/m²)", minimum=0, maximum=3.5, step=0.01, value=0.5,
+                  info="0 at night · up to ~3.5 at noon in summer"),
+    "snowfall": dict(label="❄️ Snowfall (cm)", minimum=0, maximum=9, step=0.1, value=0),
+    "rain_prev": dict(label="☔ Rain in previous 3 hours (mm)", minimum=0, maximum=52, step=0.1, value=0),
+}
+
+
+def weather_slider(name):
+    return gr.Slider(elem_classes="bike-slider", **WEATHER_SLIDERS[name])
+
+
+# The calendar is the only way to set the date: the text box becomes read-only and opens it.
+DATE_PICKER_JS = """
+() => {
+  const wire = () => {
+    const root = document.querySelector('#bike-date');
+    const input = root && root.querySelector('input');
+    const button = root && root.querySelector('button.calendar');
+    if (!input || !button) return false;
+    if (!input.dataset.bikeCalendar) {
+      input.dataset.bikeCalendar = '1';
+      input.readOnly = true;
+      input.setAttribute('aria-label', 'Date, choose from the calendar');
+      input.addEventListener('click', () => button.click());
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); button.click(); }
+      });
+    }
+    return true;
+  };
+  if (!wire()) { const timer = setInterval(() => { if (wire()) clearInterval(timer); }, 200); }
+}
+"""
+
 THEME = gr.themes.Soft(
     primary_hue=gr.themes.colors.green,
     secondary_hue=gr.themes.colors.blue,
@@ -107,7 +152,7 @@ html, body, gradio-app, .gradio-container { width: 100% !important; max-width: 1
 .bike-panel .gr-form { background: transparent !important; }
 .bike-panel label, .bike-panel .block-title { color: var(--bike-ink) !important; font-weight: 800 !important; }
 .bike-panel input, .bike-panel textarea { border-radius: 10px !important; }
-.bike-panel .bike-subtitle { color: var(--bike-muted) !important; font-size: .88rem; }
+.bike-panel .bike-subtitle { color: var(--bike-muted) !important; font-size: .88rem; padding: 0 8px; }
 .bike-predict { margin-top: 14px; border-radius: 14px !important; min-height: 48px; font-weight: 900 !important; background: linear-gradient(100deg, #0b8955, #168dad) !important; color: #fff !important; border: none !important; }
 .bike-result { min-height: 322px; padding: 29px; position: sticky; top: 16px; background: linear-gradient(160deg, var(--bike-surface), var(--bike-soft)); }
 .bike-result .label { color: var(--bike-muted) !important; text-transform: uppercase; letter-spacing: .12em; font-weight: 900; font-size: .76rem; }
@@ -115,6 +160,25 @@ html, body, gradio-app, .gradio-container { width: 100% !important; max-width: 1
 .bike-result .unit { color: var(--bike-accent) !important; font-size: 1.2rem; font-weight: 900; }
 .bike-result .detail { color: var(--bike-muted) !important; font-size: .92rem; margin-top: 16px; line-height: 1.5; }
 .bike-result .line { height: 4px; width: 56px; border-radius: 4px; background: linear-gradient(90deg, #18a85f, #2697bf); margin-top: 25px; }
+#bike-date input { cursor: pointer; caret-color: transparent; font-weight: 800; color: var(--bike-ink) !important; }
+#bike-date button.calendar { color: var(--bike-accent) !important; border-radius: 10px; }
+#bike-date button.calendar:hover { background: var(--bike-soft) !important; }
+.picker { border: 1px solid var(--bike-edge) !important; border-radius: 18px !important; background: var(--bike-surface) !important;
+  box-shadow: 0 18px 40px rgba(13, 83, 89, .18) !important; padding: 12px !important; }
+.picker .month-year { color: var(--bike-ink) !important; font-weight: 900 !important; }
+.picker .nav-button { color: var(--bike-accent) !important; border-radius: 10px !important; font-weight: 900 !important; }
+.picker .nav-button:hover { background: var(--bike-soft) !important; }
+.picker .weekday { color: var(--bike-muted) !important; font-weight: 800 !important; }
+.picker .day { border-radius: 10px !important; color: var(--bike-ink) !important; font-weight: 700 !important; }
+.picker .day.other-month { color: var(--bike-muted) !important; opacity: .45; }
+.picker .day:hover { background: var(--bike-soft) !important; }
+.picker .day.selected { background: linear-gradient(135deg, #0b8955, #168dad) !important; color: #fff !important; }
+.picker-actions > .action-button:first-child { display: none !important; }
+.picker .action-button { border-radius: 10px !important; font-weight: 800 !important; }
+.picker-actions-right .action-button:last-child { background: var(--bike-accent) !important; color: #fff !important; border-color: transparent !important; }
+.dark .picker-actions-right .action-button:last-child { color: #0b2a20 !important; }
+.bike-slider input[type=range] { accent-color: var(--bike-accent); }
+.bike-slider input[type=number] { font-weight: 800; color: var(--bike-ink) !important; border-radius: 10px !important; }
 .bike-result.bike-error .value { color: #b42318 !important; }
 .bike-result.bike-error .detail { color: #b42318 !important; font-weight: 700; }
 .bike-warn { margin: 14px 0 0; padding: 10px 14px 10px 30px; border-radius: 12px; background: #fff6e0; color: #7a4b00 !important; font-size: .86rem; line-height: 1.45; }
@@ -151,14 +215,11 @@ def load_metrics():
 
 
 def parse_date(day):
-    """Accept YYYY-MM-DD or the dataset's DD/MM/YYYY."""
-    text = str(day or "").strip()
-    for fmt in ("%Y-%m-%d", "%d/%m/%Y"):
-        try:
-            return datetime.strptime(text, fmt).date()
-        except ValueError:
-            pass
-    raise ValueError("Enter a valid date as YYYY-MM-DD (e.g. 2018-06-13) or DD/MM/YYYY.")
+    """The calendar sends YYYY-MM-DD (a time part, if any, is ignored)."""
+    try:
+        return datetime.strptime(str(day or "").strip()[:10], "%Y-%m-%d").date()
+    except ValueError as exc:
+        raise ValueError("Choose a date from the calendar.") from exc
 
 
 def describe_date(day):
@@ -166,7 +227,7 @@ def describe_date(day):
     try:
         selected = parse_date(day)
     except ValueError:
-        return "Enter a valid date to see its day of week and season."
+        return "Choose a date to see its day of week and season."
     weekday = selected.weekday()
     kind = "weekend" if weekday >= 5 else "weekday"
     note = " · public holiday in the dataset" if selected.isoformat() in DATASET_HOLIDAYS else ""
@@ -360,34 +421,34 @@ def build_ui():
           <div class="bike-steps">
             <div class="bike-step"><span class="num">1</span><strong>Choose a time</strong><span>Pick a date and hour; season and weekend are filled in for you.</span></div>
             <div class="bike-step"><span class="num">2</span><strong>Add the weather</strong><span>Enter conditions measured in that hour.</span></div>
-            <div class="bike-step"><span class="num">3</span><strong>See the estimate</strong><span>Get a citywide rentals estimate in bikes/hour.</span></div>
+            <div class="bike-step"><span class="num">3</span><strong>See the estimate</strong><span>The citywide estimate in bikes/hour updates as you change any value.</span></div>
           </div>""")
         with gr.Row(elem_classes="main-grid"):
             with gr.Column(scale=3, min_width=320, elem_classes="bike-panel"):
                 gr.HTML('<h3>Time</h3><p>Pick the hour you want to estimate.</p>')
                 with gr.Row():
-                    day = gr.Textbox(label="Date", value="2018-06-13", placeholder="YYYY-MM-DD",
-                                     info="YYYY-MM-DD, e.g. 2018-06-13 (DD/MM/YYYY also works).")
+                    day = gr.DateTime(label="📅 Date", value="2018-06-13", include_time=False, type="string",
+                                      elem_id="bike-date", info="Click to choose from the calendar.")
                     holiday = gr.Dropdown(["No Holiday", "Holiday"], label="Public holiday", value="No Holiday",
                                           info="Pre-selected for holidays in the dataset.")
-                hour = gr.Slider(0, 23, value=18, step=1, label="Hour of day (0–23)",
-                                 info="18 means 18:00–18:59.")
+                hour = gr.Slider(0, 23, value=18, step=1, label="🕒 Hour of day (0–23)",
+                                 info="18 means 18:00–18:59.", elem_classes="bike-slider")
                 date_info = gr.Markdown(describe_date("2018-06-13"), elem_classes="bike-subtitle")
                 gr.HTML('<h3 style="margin-top:24px">Weather</h3><p>Enter the conditions for that hour.</p>')
                 with gr.Row():
-                    temp = gr.Number(label="Temperature (°C)", value=24)
-                    humidity = gr.Number(label="Humidity (%)", value=60)
+                    temp = weather_slider("temp")
+                    humidity = weather_slider("humidity")
                 with gr.Row():
-                    rainfall = gr.Number(label="Rainfall (mm)", value=0)
-                    wind = gr.Number(label="Wind speed (m/s)", value=1.5)
+                    rainfall = weather_slider("rainfall")
+                    wind = weather_slider("wind")
                 with gr.Accordion("Additional weather used by the model", open=False):
-                    gr.Markdown("These measurements help the model match its training data. Visibility is recorded in units of 10 metres; 2,000 means 20 km. Dew point is calculated from temperature and humidity.", elem_classes="bike-subtitle")
+                    gr.Markdown("These measurements help the model match its training data. Dew point is calculated from temperature and humidity.", elem_classes="bike-subtitle")
                     with gr.Row():
-                        visibility = gr.Number(label="Visibility (10 m units)", value=2000)
-                        solar = gr.Number(label="Solar radiation (MJ/m²)", value=0.5)
+                        visibility = weather_slider("visibility")
+                        solar = weather_slider("solar")
                     with gr.Row():
-                        snowfall = gr.Number(label="Snowfall (cm)", value=0)
-                        rain_prev = gr.Number(label="Rain in previous 3 hours (mm)", value=0)
+                        snowfall = weather_slider("snowfall")
+                        rain_prev = weather_slider("rain_prev")
                 button = gr.Button("Predict demand →", variant="primary", elem_classes="bike-predict")
             with gr.Column(scale=2, min_width=280):
                 result = gr.HTML(result_card())
@@ -396,9 +457,13 @@ def build_ui():
         inputs = [day, hour, holiday, temp, humidity, rainfall,
                   wind, visibility, solar, snowfall, rain_prev]
         day.change(fn=describe_date, inputs=day, outputs=date_info)
-        day.input(fn=suggest_holiday, inputs=day, outputs=holiday)
+        day.change(fn=suggest_holiday, inputs=day, outputs=holiday)
         button.click(fn=predict, inputs=inputs, outputs=result)
+        # Keep the estimate in step with the inputs; while a slider is dragged only the last value runs.
+        gr.on(triggers=[component.change for component in inputs], fn=predict, inputs=inputs,
+              outputs=result, trigger_mode="always_last", show_progress="hidden")
         page.load(fn=predict, inputs=inputs, outputs=result)
+        page.load(fn=None, js=DATE_PICKER_JS)
         gr.HTML('<h2 class="bike-heading">Try an example</h2><p class="bike-note">Select a scenario to load its conditions and prediction.</p>')
         with gr.Group(elem_classes="bike-examples"):
             gr.Examples(examples=EXAMPLES, example_labels=EXAMPLE_LABELS, inputs=inputs,
