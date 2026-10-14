@@ -74,7 +74,9 @@ python app/app.py                    # เปิดแอปที่ http://127
 
 ## 6. URL แอป
 
-- bike-regression: TODO (deploy `bike-regression/app/` แล้วใส่ URL)
+- **bike-regression:** https://sh080205--seoul-bike-demand.us-east.modal.run
+
+deploy บน [Modal](https://modal.com) ด้วย `bike-regression/app/modal_app.py` · ถ้าไม่มีคนใช้ 20 นาที แอปจะพักเครื่อง การเปิดครั้งแรกหลังจากนั้นใช้เวลาเริ่มประมาณ 5–10 วินาที · deploy ซ้ำ: `pip install modal` → `modal token new` → `modal deploy bike-regression/app/modal_app.py` (รายละเอียดใน `bike-regression/app/README.md`)
 
 ## 7. โครงสร้างไฟล์
 
@@ -90,7 +92,7 @@ bike-regression/notebooks/              00_setup → 01_eda → 02_modeling
 bike-regression/figures/                กราฟที่ notebook สร้าง
 bike-regression/scripts/                make_dataset, run_notebooks, export_app_model, export_results
 bike-regression/verification/           ผลและตารางจากรอบรันล่าสุด (results.json, *.csv, log)
-bike-regression/app/                    Gradio app (self-contained): app.py, model.joblib, model_metrics.json, requirements.txt
+bike-regression/app/                    Gradio app (self-contained): app.py, model.joblib, model_metrics.json, requirements.txt, modal_app.py (deploy)
 ```
 
 ## 8. สมาชิก (เรียงตามรหัสนิสิต)
